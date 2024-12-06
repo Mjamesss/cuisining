@@ -1,0 +1,165 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+  }
+
+  .background {
+
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    height: 100%;
+    width: 100%;
+  }
+
+  .form-container {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 500px;
+  }
+
+  .form-container input,
+  .form-container button {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+  }
+
+  .form-container button {
+    background-color: #C1B857;
+    color: #363100;
+    cursor: pointer;
+    font-weight: 700;
+  }
+
+  .form-container button:hover {
+    background-color: #948d44;
+  }
+
+  /* Center form on the page */
+  .form-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  form h2 {
+    text-align: center;
+    font-size: 70px;
+    color: #363100;
+    font-weight: 800;
+  }
+
+  #logo {
+    height: 60px;
+    width: 60px;
+    margin-bottom: 10px;
+  }
+
+  /* Forgot Password Styling */
+  .forgot-password {
+    display: block;
+    text-align: center;
+    font-size: 16px;
+    color: #363100;
+    margin-top: 10px;
+    text-decoration: none;
+    font-weight: 300;
+  }
+
+  .forgot-password:hover {
+    text-decoration: underline;
+  }
+
+  /* Social Buttons Container (Using Flexbox for horizontal layout) */
+  .social-buttons-container {
+    display: flex;
+    justify-content: center;
+    gap: 30px; /* Space between buttons */
+    margin-top: 20px;
+  }
+
+  .social-button img {
+    width: 100%;
+    max-width: 45px; /* Ensure images do not stretch too much */
+    height: auto;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+
+  .social-button img:hover {
+    opacity: 0.9;
+  }
+
+  /* Sign Up Section */
+  .signup {
+    justify-content: center;
+    display: flex;
+    margin-top: 30px;
+  }
+
+  .signup p {
+    font-size: 14px;
+    font-weight: 200;
+    color: #363100;
+  }
+
+  .signup a {
+    text-decoration: none;
+    font-weight: 700;
+    color: #363100;
+  }
+
+  /* Mobile Responsiveness */
+  @media (max-width: 768px) {
+    .form-container {
+      width: 90%; /* Take up 90% of the screen width */
+      padding: 20px; /* Reduced padding for smaller screens */
+    }
+
+    form h2 {
+      font-size: 50px; /* Adjusted title font size */
+    }
+
+    #logo {
+      height: 50px;
+      width: 50px;
+    }
+
+    /* Adjust social buttons on medium screens */
+    .social-buttons-container {
+      gap: 15px; /* Reduced gap between buttons */
+    }
+
+    .social-button img {
+      max-width: 40px; /* Smaller icons for mobile */
+    }
+
+    .signup p {
+      font-size: 12px; /* Smaller font for the sign-up text */
+    }
+  }
+
+  @media (max-width: 480px) {
+    form h2 {
+      font-size: 40px; /* Further reduced title font size for very small screens */
+    }
+
+    /* Adjust social buttons for small screens */
+    .social-buttons-container {
+      gap: 10px; /* Further reduced gap for very small screens */
+    }
+
+    .social-button img {
+      max-width: 35px; /* Smaller icons on very small screens */
+    }
+  }
