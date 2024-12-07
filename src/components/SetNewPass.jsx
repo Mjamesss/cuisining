@@ -138,10 +138,21 @@ const SetNewPassword = () => {
     }
   };
 
+  // Handle Enter key press to trigger form submission
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSubmit(e);
+    }
+  };
+
   return (
     <div style={styles.background}>
       <div style={styles.formWrapper}>
-        <div style={styles.formContainer}>
+        <div
+          style={styles.formContainer}
+          onKeyDown={handleKeyPress} // Listen for Enter key press
+          tabIndex="0" // Make the div focusable
+        >
           <h2 style={styles.heading}>Set a New Password</h2>
           <p style={styles.infoText}>
             Create a new password. Ensure it differs from previous ones for security.

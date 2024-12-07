@@ -71,7 +71,7 @@ const SuccessPage = () => {
       <div style={styles.formWrapper}>
         <div style={styles.formContainer}>
           {/* Check mark logo */}
-          <img src="check_logo.png" alt="Success" style={styles.logo} />
+          <img src="success.png" alt="Success" style={styles.logo} />
 
           {/* Heading */}
           <h2 style={styles.heading}>Successful</h2>
