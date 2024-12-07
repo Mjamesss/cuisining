@@ -25,9 +25,9 @@ const LoginForm = () => {
       minHeight: "100vh",
     },
     formContainer: {
-      background: "rgba(255, 255, 255, 0.9)",
+      background: "rgba(255, 255, 255, 0.7)",
       backdropFilter: "blur(10px)",
-      WebkitBackdropFilter: "blur(10px)",
+      WebkitBackdropFilter: "blur(0px)",
       borderRadius: "10px",
       padding: "25px",
       boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
