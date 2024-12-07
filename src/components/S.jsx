@@ -8,6 +8,36 @@ const SignUpForm = () => {
     confirmPassword: false,
   });
 
+  const [showPassword, setShowPassword] = useState(false); // State for toggling password visibility
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // State for confirming password visibility
+  const [usernameTaken, setUsernameTaken] = useState(""); // State to handle username availability
+  const [passwordError, setPasswordError] = useState(""); // State for password validation error
+
+  // Simulate checking if a username is taken (replace with backend call if needed)
+  const checkUsernameAvailability = (username) => {
+    const takenUsernames = ["user1", "admin"]; // Example taken usernames
+    if (takenUsernames.includes(username)) {
+      setUsernameTaken("Username is already taken");
+    } else {
+      setUsernameTaken("Username is available");
+    }
+  };
+
+  // Password validation
+  const validatePassword = (password) => {
+    if (password.length < 6) {
+      setPasswordError("Password must be at least 6 characters long.");
+    } else {
+      setPasswordError("");
+    }
+  };
+
+  const handleFocus = (field) => setFocus((prev) => ({ ...prev, [field]: true }));
+  const handleBlur = (field, value) => {
+    if (!value) setFocus((prev) => ({ ...prev, [field]: false }));
+    if (field === "password") validatePassword(value); // Validate password on blur
+  };
+
   const styles = {
     background: {
       backgroundImage: "url('lbg.png')", // Replace with your image URL
@@ -21,16 +51,18 @@ const SignUpForm = () => {
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
-      height: "100vh",
+      padding: "20px",
+      minHeight: "100vh",
     },
     formContainer: {
-      background: "rgba(255, 255, 255, 0.7)",
-      backdropFilter: "blur(0px)",
-      WebkitBackdropFilter: "blur(0px)",
+      background: "rgba(255, 255, 255, 0.9)",
+      backdropFilter: "blur(10px)",
+      WebkitBackdropFilter: "blur(10px)",
       borderRadius: "10px",
       padding: "25px",
       boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-      width: "500px",
+      width: "100%",
+      maxWidth: "400px",
     },
     inputWrapper: {
       position: "relative",
@@ -71,6 +103,15 @@ const SignUpForm = () => {
       cursor: "pointer",
       fontWeight: "700",
     },
+    showPasswordButton: {
+      position: "absolute",
+      right: "10px",
+      top: "50%",
+      transform: "translateY(-50%)",
+      background: "transparent",
+      border: "none",
+      cursor: "pointer",
+    },
     hrContainer: {
       display: "flex",
       alignItems: "center",
@@ -92,7 +133,7 @@ const SignUpForm = () => {
     socialButtonsContainer: {
       display: "flex",
       justifyContent: "center",
-      gap: "30px",
+      gap: "20px",
     },
     socialButtonImg: {
       width: "100%",
@@ -104,7 +145,7 @@ const SignUpForm = () => {
     signup: {
       justifyContent: "center",
       display: "flex",
-      marginTop: "30px",
+      marginTop: "20px",
     },
     signupText: {
       fontSize: "14px",
@@ -116,11 +157,23 @@ const SignUpForm = () => {
       fontWeight: "700",
       color: "#363100",
     },
-  };
-
-  const handleFocus = (field) => setFocus((prev) => ({ ...prev, [field]: true }));
-  const handleBlur = (field, value) => {
-    if (!value) setFocus((prev) => ({ ...prev, [field]: false }));
+    heading: {
+      textAlign: "center",
+      fontSize: "35px", // Reduced size for mobile
+      color: "#363100",
+      fontWeight: "800",
+      lineHeight: "1.2",
+    },
+    headingLogo: {
+      height: "40px", // Reduced size for mobile
+      width: "40px",
+      marginBottom: "10px",
+    },
+    passwordError: {
+      color: "red",
+      fontSize: "12px",
+      marginTop: "5px",
+    },
   };
 
   return (
@@ -128,12 +181,7 @@ const SignUpForm = () => {
       <div style={styles.formWrapper}>
         <div style={styles.formContainer}>
           <form>
-            <h2 style={{ textAlign: "center", fontSize: "70px", color: "#363100", fontWeight: "800" }}>
-              <span>
-                <img src="cuisining-wordmark.png" alt="C" style={{ height: "60px", width: "60px", marginBottom: "10px" }} />
-              </span>
-              UISINING
-            </h2>
+            <h2 style={styles.heading}>CUISINING</h2>
             {/* Name Input */}
             <div style={styles.inputWrapper}>
               <label style={styles.label(focus.name)}>Name</label>
@@ -157,14 +205,18 @@ const SignUpForm = () => {
                   ...(focus.username && styles.inputFocused),
                 }}
                 onFocus={() => handleFocus("username")}
-                onBlur={(e) => handleBlur("username", e.target.value)}
+                onBlur={(e) => {
+                  handleBlur("username", e.target.value);
+                  checkUsernameAvailability(e.target.value); // Check username availability
+                }}
               />
+              {usernameTaken && <div style={{ color: "red" }}>{usernameTaken}</div>}
             </div>
             {/* Password Input */}
             <div style={styles.inputWrapper}>
               <label style={styles.label(focus.password)}>Password</label>
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 style={{
                   ...styles.input,
                   ...(focus.password && styles.inputFocused),
@@ -172,12 +224,24 @@ const SignUpForm = () => {
                 onFocus={() => handleFocus("password")}
                 onBlur={(e) => handleBlur("password", e.target.value)}
               />
+              <button
+                type="button"
+                style={styles.showPasswordButton}
+                onClick={() => setShowPassword(!showPassword)} // Toggle the showPassword state
+              >
+                <img
+                  src={showPassword ? "view.png" : "hide.png"}
+                  alt={showPassword ? "Hide Password" : "Show Password"}
+                  style={{ width: "20px", height: "20px" }}
+                />
+              </button>
             </div>
+            {passwordError && <div style={styles.passwordError}>{passwordError}</div>}
             {/* Confirm Password Input */}
             <div style={styles.inputWrapper}>
               <label style={styles.label(focus.confirmPassword)}>Confirm Password</label>
               <input
-                type="password"
+                type={showConfirmPassword ? "text" : "password"}
                 style={{
                   ...styles.input,
                   ...(focus.confirmPassword && styles.inputFocused),
@@ -185,8 +249,21 @@ const SignUpForm = () => {
                 onFocus={() => handleFocus("confirmPassword")}
                 onBlur={(e) => handleBlur("confirmPassword", e.target.value)}
               />
+              <button
+                type="button"
+                style={styles.showPasswordButton}
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)} // Toggle confirm password visibility
+              >
+                <img
+                  src={showConfirmPassword ? "view.png" : "hide.png"}
+                  alt={showConfirmPassword ? "Hide Password" : "Show Password"}
+                  style={{ width: "20px", height: "20px" }}
+                />
+              </button>
             </div>
-            <button type="submit" style={styles.button}>Sign Up</button>
+            <button type="submit" style={styles.button}>
+              Sign Up
+            </button>
             {/* Divider */}
             <div style={styles.hrContainer}>
               <hr style={styles.hr} />
@@ -196,17 +273,28 @@ const SignUpForm = () => {
             {/* Social Media Buttons */}
             <div style={styles.socialButtonsContainer}>
               <a href="#" className="social-button" style={styles.socialButtonImg}>
-                <img src="facebook.png" alt="Facebook Login" style={styles.socialButtonImg} />
+                <img
+                  src="facebook.png"
+                  alt="Facebook Login"
+                  style={styles.socialButtonImg}
+                />
               </a>
               <a href="#" className="social-button" style={styles.socialButtonImg}>
-                <img src="google.png" alt="Google Login" style={styles.socialButtonImg} />
+                <img
+                  src="google.png"
+                  alt="Google Login"
+                  style={styles.socialButtonImg}
+                />
               </a>
             </div>
-              <div style={styles.signup}>
-                <p style={styles.signupText}>
-                  Already Have an Account? <a href="/" style={styles.signupLink}>Log In</a>
-                </p>
-              </div>
+            <div style={styles.signup}>
+              <p style={styles.signupText}>
+                Already Have an Account?{" "}
+                <a href="/" style={styles.signupLink}>
+                  Log In
+                </a>
+              </p>
+            </div>
           </form>
         </div>
       </div>

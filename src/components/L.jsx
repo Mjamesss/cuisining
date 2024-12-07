@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 
 const LoginForm = () => {
-  const [focus, setFocus] = useState({ username: false, password: false });
+  const [focus, setFocus] = useState({
+    username: false,
+    password: false,
+  });
+
+  const [showPassword, setShowPassword] = useState(false); // State for toggling password visibility
 
   const styles = {
-    body: {
-      margin: 0,
-      padding: 0,
-      height: "100%",
-      width: "100%",
-    },
     background: {
       backgroundImage: "url('lbg.png')", // Replace with your image URL
       backgroundSize: "cover",
@@ -22,35 +21,18 @@ const LoginForm = () => {
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
-      height: "100vh",
+      padding: "20px",
+      minHeight: "100vh",
     },
     formContainer: {
-      background: "rgba(255, 255, 255, 0.7)",
-      backdropFilter: "blur(0px)",
-      WebkitBackdropFilter: "blur(0px)",
+      background: "rgba(255, 255, 255, 0.9)",
+      backdropFilter: "blur(10px)",
+      WebkitBackdropFilter: "blur(10px)",
       borderRadius: "10px",
       padding: "25px",
       boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-      width: "90%",
-      maxWidth: "500px", // Limits width on large screens
-    },
-    header: {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      flexDirection: "row",
-      gap: "10px", // Space between logo and text
-      marginBottom: "20px",
-    },
-    logo: {
-      height: "60px",
-      width: "60px",
-    },
-    title: {
-      fontSize: "70px",
-      color: "#363100",
-      fontWeight: "800",
-      margin: 0, // Remove default margin
+      width: "100%",
+      maxWidth: "400px",
     },
     inputWrapper: {
       position: "relative",
@@ -69,16 +51,16 @@ const LoginForm = () => {
     input: {
       width: "100%",
       padding: "10px",
-      border: "1px solid transparent", // No border by default
+      border: "1px solid transparent",
       borderRadius: "10px",
-      outline: "none", // Removes the default browser outline
-      backgroundColor: "#f8f8f8", // Optional: A soft background color
-      transition: "all 0.3s ease", // Smooth transition for focus styles
+      outline: "none",
+      backgroundColor: "#f8f8f8",
+      transition: "all 0.3s ease",
     },
     inputFocused: {
-      border: "1px solid #ffffff", // Highlight border on focus
-      boxShadow: "0 0 8px rgba(193, 184, 87, 0.5)", // Optional glow effect
-      backgroundColor: "#fff", // Optional: Brighter background
+      border: "1px solid #C1B857",
+      boxShadow: "0 0 8px rgba(193, 184, 87, 0.5)",
+      backgroundColor: "#fff",
     },
     button: {
       width: "100%",
@@ -91,24 +73,32 @@ const LoginForm = () => {
       cursor: "pointer",
       fontWeight: "700",
     },
-    forgotPassword: {
-      display: "block",
-      textAlign: "center",
+    hrContainer: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      margin: "20px 0",
+    },
+    hr: {
+      flex: 1,
+      height: "1px",
+      backgroundColor: "#000000",
+      border: "none",
+    },
+    orText: {
+      margin: "0 10px",
       fontSize: "16px",
       color: "#363100",
-      marginTop: "10px",
-      textDecoration: "none",
       fontWeight: "300",
     },
     socialButtonsContainer: {
       display: "flex",
       justifyContent: "center",
-      gap: "30px", // Space between the buttons
-      marginTop: "20px",
+      gap: "20px",
     },
     socialButtonImg: {
       width: "100%",
-      maxWidth: "45px", // Ensure images do not stretch too much
+      maxWidth: "45px",
       height: "auto",
       borderRadius: "10px",
       cursor: "pointer",
@@ -116,7 +106,7 @@ const LoginForm = () => {
     signup: {
       justifyContent: "center",
       display: "flex",
-      marginTop: "30px",
+      marginTop: "20px",
     },
     signupText: {
       fontSize: "14px",
@@ -128,26 +118,26 @@ const LoginForm = () => {
       fontWeight: "700",
       color: "#363100",
     },
-    "@media (max-width: 768px)": {
-      header: {
-        flexDirection: "column", // Stack logo and text vertically on small screens
-      },
-      title: {
-        fontSize: "50px", // Reduce font size for smaller screens
-      },
-      logo: {
-        height: "50px", // Adjust logo size
-        width: "50px",
-      },
+    heading: {
+      textAlign: "center",
+      fontSize: "35px", // Reduced size for mobile
+      color: "#363100",
+      fontWeight: "800",
+      lineHeight: "1.2",
     },
-    "@media (max-width: 480px)": {
-      title: {
-        fontSize: "40px", // Further reduce font size for very small screens
-      },
-      logo: {
-        height: "40px",
-        width: "40px",
-      },
+    headingLogo: {
+      height: "40px", // Reduced size for mobile
+      width: "40px",
+      marginBottom: "10px",
+    },
+    showPasswordButton: {
+      position: "absolute",
+      right: "10px",
+      top: "50%",
+      transform: "translateY(-50%)",
+      background: "transparent",
+      border: "none",
+      cursor: "pointer",
     },
   };
 
@@ -161,15 +151,7 @@ const LoginForm = () => {
       <div style={styles.formWrapper}>
         <div style={styles.formContainer}>
           <form>
-            {/* Header with Logo and Title */}
-            <div style={styles.header}>
-              <img
-                src="cuisining-wordmark.png"
-                alt="C"
-                style={styles.logo}
-              />
-              <h2 style={styles.title}>UISINING</h2>
-            </div>
+            <h2 style={styles.heading}>CUISINING</h2>
             {/* Username Input */}
             <div style={styles.inputWrapper}>
               <label style={styles.label(focus.username)}>Username</label>
@@ -187,7 +169,7 @@ const LoginForm = () => {
             <div style={styles.inputWrapper}>
               <label style={styles.label(focus.password)}>Password</label>
               <input
-                type="password"
+                type={showPassword ? "text" : "password"} // Toggle password visibility
                 style={{
                   ...styles.input,
                   ...(focus.password && styles.inputFocused),
@@ -195,23 +177,51 @@ const LoginForm = () => {
                 onFocus={() => handleFocus("password")}
                 onBlur={(e) => handleBlur("password", e.target.value)}
               />
+              {/* Show/Hide Password Button */}
+              <button
+                type="button"
+                style={styles.showPasswordButton}
+                onClick={() => setShowPassword(!showPassword)} // Toggle the showPassword state
+              >
+                <img
+                  src={showPassword ? "view.png" : "hide.png"} // Change image based on state
+                  alt={showPassword ? "Hide Password" : "Show Password"}
+                  style={{ width: "20px", height: "20px" }} // Adjust size of the icon
+                />
+              </button>
             </div>
-            <button type="submit" style={styles.button}>Login</button>
-            <a href="#" style={styles.forgotPassword}>
-              Forgot Password?
-            </a>
-            <hr />
+            <button type="submit" style={styles.button}>
+              Log In
+            </button>
+            {/* Divider */}
+            <div style={styles.hrContainer}>
+              <hr style={styles.hr} />
+              <span style={styles.orText}>or</span>
+              <hr style={styles.hr} />
+            </div>
+            {/* Social Media Buttons */}
             <div style={styles.socialButtonsContainer}>
               <a href="#" className="social-button" style={styles.socialButtonImg}>
-                <img src="facebook.png" alt="Facebook Login" style={styles.socialButtonImg} />
+                <img
+                  src="facebook.png"
+                  alt="Facebook Login"
+                  style={styles.socialButtonImg}
+                />
               </a>
               <a href="#" className="social-button" style={styles.socialButtonImg}>
-                <img src="google.png" alt="Google Login" style={styles.socialButtonImg} />
+                <img
+                  src="google.png"
+                  alt="Google Login"
+                  style={styles.socialButtonImg}
+                />
               </a>
             </div>
             <div style={styles.signup}>
               <p style={styles.signupText}>
-                New to Cuisining? <a href="/signup" style={styles.signupLink}>Sign Up</a>
+                Don't Have an Account?{" "}
+                <a href="/signup" style={styles.signupLink}>
+                  Sign Up
+                </a>
               </p>
             </div>
           </form>
