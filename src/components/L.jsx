@@ -139,6 +139,15 @@ const LoginForm = () => {
       border: "none",
       cursor: "pointer",
     },
+    forgotPasswordLink: {
+      display: "block",
+      textAlign: "center",
+      fontSize: "14px",
+      color: "#363100",
+      textDecoration: "none",
+      marginTop: "10px",
+      fontWeight: "500",
+    },
   };
 
   const handleFocus = (field) => setFocus((prev) => ({ ...prev, [field]: true }));
@@ -193,6 +202,11 @@ const LoginForm = () => {
             <button type="submit" style={styles.button}>
               Log In
             </button>
+            {/* Forgot Password Link */}
+            <a href="/ForgotPass" style={styles.forgotPasswordLink}>
+              Forgot Password?
+            </a>
+            
             {/* Divider */}
             <div style={styles.hrContainer}>
               <hr style={styles.hr} />
