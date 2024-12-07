@@ -11,7 +11,7 @@ const LoginForm = () => {
       width: "100%",
     },
     background: {
-      backgroundImage: "url('lbg.png')", // Replace with your image URL
+      backgroundImage: "url('lbg.png')",
       backgroundSize: "cover",
       backgroundPosition: "center",
       backgroundAttachment: "fixed",
@@ -23,6 +23,7 @@ const LoginForm = () => {
       justifyContent: "center",
       alignItems: "center",
       height: "100vh",
+      padding: "20px", // Add padding for smaller screens
     },
     formContainer: {
       background: "rgba(255, 255, 255, 0.7)",
@@ -31,7 +32,9 @@ const LoginForm = () => {
       borderRadius: "10px",
       padding: "25px",
       boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-      width: "500px",
+      width: "100%",
+      maxWidth: "500px",
+      boxSizing: "border-box",
     },
     inputWrapper: {
       position: "relative",
@@ -50,20 +53,21 @@ const LoginForm = () => {
     input: {
       width: "100%",
       padding: "10px",
-      border: "1px solid transparent", // No border by default
+      border: "1px solid transparent",
       borderRadius: "10px",
-      outline: "none", // Removes the default browser outline
-      backgroundColor: "#f8f8f8", // Optional: A soft background color
-      transition: "all 0.3s ease", // Smooth transition for focus styles
+      outline: "none",
+      backgroundColor: "#f8f8f8",
+      transition: "all 0.3s ease",
+      fontSize: "16px",
     },
     inputFocused: {
-      border: "1px solid #ffffff", // Highlight border on focus
-      boxShadow: "0 0 8px rgba(193, 184, 87, 0.5)", // Optional glow effect
-      backgroundColor: "#fff", // Optional: Brighter background
+      border: "1px solid #ffffff",
+      boxShadow: "0 0 8px rgba(193, 184, 87, 0.5)",
+      backgroundColor: "#fff",
     },
     button: {
       width: "100%",
-      padding: "10px",
+      padding: "15px",
       margin: "10px 0",
       border: "1px solid #ccc",
       borderRadius: "10px",
@@ -71,11 +75,12 @@ const LoginForm = () => {
       color: "#363100",
       cursor: "pointer",
       fontWeight: "700",
+      fontSize: "16px",
     },
     forgotPassword: {
       display: "block",
       textAlign: "center",
-      fontSize: "16px",
+      fontSize: "14px",
       color: "#363100",
       marginTop: "10px",
       textDecoration: "none",
@@ -84,12 +89,12 @@ const LoginForm = () => {
     socialButtonsContainer: {
       display: "flex",
       justifyContent: "center",
-      gap: "30px", // Space between the buttons
+      gap: "15px",
       marginTop: "20px",
     },
     socialButtonImg: {
       width: "100%",
-      maxWidth: "45px", // Ensure images do not stretch too much
+      maxWidth: "40px",
       height: "auto",
       borderRadius: "10px",
       cursor: "pointer",
@@ -97,7 +102,7 @@ const LoginForm = () => {
     signup: {
       justifyContent: "center",
       display: "flex",
-      marginTop: "30px",
+      marginTop: "20px",
     },
     signupText: {
       fontSize: "14px",
@@ -109,7 +114,37 @@ const LoginForm = () => {
       fontWeight: "700",
       color: "#363100",
     },
+    // Add responsive design
+    "@media (max-width: 768px)": {
+      formContainer: {
+        padding: "15px",
+        maxWidth: "90%",
+      },
+      button: {
+        padding: "12px",
+        fontSize: "14px",
+      },
+      label: {
+        fontSize: "14px",
+      },
+    },
+    "@media (max-width: 480px)": {
+      h2: {
+        fontSize: "50px",
+      },
+      input: {
+        fontSize: "14px",
+      },
+      button: {
+        fontSize: "14px",
+        padding: "10px",
+      },
+      forgotPassword: {
+        fontSize: "12px",
+      },
+    },
   };
+  
 
   const handleFocus = (field) => setFocus((prev) => ({ ...prev, [field]: true }));
   const handleBlur = (field, value) => {
