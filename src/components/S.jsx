@@ -184,7 +184,7 @@ const SignUpForm = () => {
             <h2 style={styles.heading}>CUISINING</h2>
             {/* Name Input */}
             <div style={styles.inputWrapper}>
-              <label style={styles.label(focus.name)}>Name</label>
+              <label style={styles.label(focus.name)}>Email</label>
               <input
                 type="text"
                 style={{

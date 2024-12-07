@@ -1,16 +1,20 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Use useNavigate instead of useHistory
 
 const LoginForm = () => {
   const [focus, setFocus] = useState({
     username: false,
     password: false,
   });
-
-  const [showPassword, setShowPassword] = useState(false); // State for toggling password visibility
+  const [showPassword, setShowPassword] = useState(false); 
+  const [username, setUsername] = useState(""); 
+  const [password, setPassword] = useState("");  
+  const [error, setError] = useState("");  
+  const navigate = useNavigate();  // Use navigate instead of history
 
   const styles = {
     background: {
-      backgroundImage: "url('lbg.png')", // Replace with your image URL
+      backgroundImage: "url('lbg.png')",
       backgroundSize: "cover",
       backgroundPosition: "center",
       backgroundAttachment: "fixed",
@@ -155,12 +159,38 @@ const LoginForm = () => {
     if (!value) setFocus((prev) => ({ ...prev, [field]: false }));
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch("http://localhost:5000/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.status === 200) {
+        // Redirect to the next page if login is successful
+        navigate("/Landing"); // Replace with the desired route
+      } else {
+        setError(data.message); // Show the error message from backend
+      }
+    } catch (err) {
+      setError("An error occurred. Please try again.");
+    }
+  };
+
   return (
     <div style={styles.background}>
       <div style={styles.formWrapper}>
         <div style={styles.formContainer}>
-          <form>
+          <form onSubmit={handleSubmit}>
             <h2 style={styles.heading}>CUISINING</h2>
+
             {/* Username Input */}
             <div style={styles.inputWrapper}>
               <label style={styles.label(focus.username)}>Username</label>
@@ -170,19 +200,24 @@ const LoginForm = () => {
                   ...styles.input,
                   ...(focus.username && styles.inputFocused),
                 }}
+                value={username} // Bind value
+                onChange={(e) => setUsername(e.target.value)} // Update username state
                 onFocus={() => handleFocus("username")}
                 onBlur={(e) => handleBlur("username", e.target.value)}
               />
             </div>
+
             {/* Password Input */}
             <div style={styles.inputWrapper}>
               <label style={styles.label(focus.password)}>Password</label>
               <input
-                type={showPassword ? "text" : "password"} // Toggle password visibility
+                type={showPassword ? "text" : "password"}
                 style={{
                   ...styles.input,
                   ...(focus.password && styles.inputFocused),
                 }}
+                value={password} // Bind value
+                onChange={(e) => setPassword(e.target.value)} // Update password state
                 onFocus={() => handleFocus("password")}
                 onBlur={(e) => handleBlur("password", e.target.value)}
               />
@@ -190,29 +225,35 @@ const LoginForm = () => {
               <button
                 type="button"
                 style={styles.showPasswordButton}
-                onClick={() => setShowPassword(!showPassword)} // Toggle the showPassword state
+                onClick={() => setShowPassword(!showPassword)}
               >
                 <img
-                  src={showPassword ? "view.png" : "hide.png"} // Change image based on state
+                  src={showPassword ? "view.png" : "hide.png"}
                   alt={showPassword ? "Hide Password" : "Show Password"}
-                  style={{ width: "20px", height: "20px" }} // Adjust size of the icon
+                  style={{ width: "20px", height: "20px" }}
                 />
               </button>
             </div>
+
+            {/* Error Message */}
+            {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
+
             <button type="submit" style={styles.button}>
               Log In
             </button>
+
             {/* Forgot Password Link */}
             <a href="/ForgotPass" style={styles.forgotPasswordLink}>
               Forgot Password?
             </a>
-            
+
             {/* Divider */}
             <div style={styles.hrContainer}>
               <hr style={styles.hr} />
               <span style={styles.orText}>or</span>
               <hr style={styles.hr} />
             </div>
+
             {/* Social Media Buttons */}
             <div style={styles.socialButtonsContainer}>
               <a href="#" className="social-button" style={styles.socialButtonImg}>
@@ -230,6 +271,7 @@ const LoginForm = () => {
                 />
               </a>
             </div>
+
             <div style={styles.signup}>
               <p style={styles.signupText}>
                 Don't Have an Account?{" "}
