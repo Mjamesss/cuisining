@@ -11,7 +11,7 @@ const LoginForm = () => {
       width: "100%",
     },
     background: {
-      backgroundImage: "url('LBG.png')", // Replace with your image URL
+      backgroundImage: "url('lbg.png')", // Replace with your image URL
       backgroundSize: "cover",
       backgroundPosition: "center",
       backgroundAttachment: "fixed",
