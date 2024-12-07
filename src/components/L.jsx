@@ -11,7 +11,7 @@ const LoginForm = () => {
       width: "100%",
     },
     background: {
-      backgroundImage: "url('lbg.png')",
+      backgroundImage: "url('lbg.png')", // Replace with your image URL
       backgroundSize: "cover",
       backgroundPosition: "center",
       backgroundAttachment: "fixed",
@@ -23,7 +23,6 @@ const LoginForm = () => {
       justifyContent: "center",
       alignItems: "center",
       height: "100vh",
-      padding: "20px", // Add padding for smaller screens
     },
     formContainer: {
       background: "rgba(255, 255, 255, 0.7)",
@@ -32,9 +31,26 @@ const LoginForm = () => {
       borderRadius: "10px",
       padding: "25px",
       boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-      width: "100%",
-      maxWidth: "500px",
-      boxSizing: "border-box",
+      width: "90%",
+      maxWidth: "500px", // Limits width on large screens
+    },
+    header: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      flexDirection: "row",
+      gap: "10px", // Space between logo and text
+      marginBottom: "20px",
+    },
+    logo: {
+      height: "60px",
+      width: "60px",
+    },
+    title: {
+      fontSize: "70px",
+      color: "#363100",
+      fontWeight: "800",
+      margin: 0, // Remove default margin
     },
     inputWrapper: {
       position: "relative",
@@ -53,21 +69,20 @@ const LoginForm = () => {
     input: {
       width: "100%",
       padding: "10px",
-      border: "1px solid transparent",
+      border: "1px solid transparent", // No border by default
       borderRadius: "10px",
-      outline: "none",
-      backgroundColor: "#f8f8f8",
-      transition: "all 0.3s ease",
-      fontSize: "16px",
+      outline: "none", // Removes the default browser outline
+      backgroundColor: "#f8f8f8", // Optional: A soft background color
+      transition: "all 0.3s ease", // Smooth transition for focus styles
     },
     inputFocused: {
-      border: "1px solid #ffffff",
-      boxShadow: "0 0 8px rgba(193, 184, 87, 0.5)",
-      backgroundColor: "#fff",
+      border: "1px solid #ffffff", // Highlight border on focus
+      boxShadow: "0 0 8px rgba(193, 184, 87, 0.5)", // Optional glow effect
+      backgroundColor: "#fff", // Optional: Brighter background
     },
     button: {
       width: "100%",
-      padding: "15px",
+      padding: "10px",
       margin: "10px 0",
       border: "1px solid #ccc",
       borderRadius: "10px",
@@ -75,12 +90,11 @@ const LoginForm = () => {
       color: "#363100",
       cursor: "pointer",
       fontWeight: "700",
-      fontSize: "16px",
     },
     forgotPassword: {
       display: "block",
       textAlign: "center",
-      fontSize: "14px",
+      fontSize: "16px",
       color: "#363100",
       marginTop: "10px",
       textDecoration: "none",
@@ -89,12 +103,12 @@ const LoginForm = () => {
     socialButtonsContainer: {
       display: "flex",
       justifyContent: "center",
-      gap: "15px",
+      gap: "30px", // Space between the buttons
       marginTop: "20px",
     },
     socialButtonImg: {
       width: "100%",
-      maxWidth: "40px",
+      maxWidth: "45px", // Ensure images do not stretch too much
       height: "auto",
       borderRadius: "10px",
       cursor: "pointer",
@@ -102,7 +116,7 @@ const LoginForm = () => {
     signup: {
       justifyContent: "center",
       display: "flex",
-      marginTop: "20px",
+      marginTop: "30px",
     },
     signupText: {
       fontSize: "14px",
@@ -114,37 +128,28 @@ const LoginForm = () => {
       fontWeight: "700",
       color: "#363100",
     },
-    // Add responsive design
     "@media (max-width: 768px)": {
-      formContainer: {
-        padding: "15px",
-        maxWidth: "90%",
+      header: {
+        flexDirection: "column", // Stack logo and text vertically on small screens
       },
-      button: {
-        padding: "12px",
-        fontSize: "14px",
+      title: {
+        fontSize: "50px", // Reduce font size for smaller screens
       },
-      label: {
-        fontSize: "14px",
+      logo: {
+        height: "50px", // Adjust logo size
+        width: "50px",
       },
     },
     "@media (max-width: 480px)": {
-      h2: {
-        fontSize: "50px",
+      title: {
+        fontSize: "40px", // Further reduce font size for very small screens
       },
-      input: {
-        fontSize: "14px",
-      },
-      button: {
-        fontSize: "14px",
-        padding: "10px",
-      },
-      forgotPassword: {
-        fontSize: "12px",
+      logo: {
+        height: "40px",
+        width: "40px",
       },
     },
   };
-  
 
   const handleFocus = (field) => setFocus((prev) => ({ ...prev, [field]: true }));
   const handleBlur = (field, value) => {
@@ -156,12 +161,15 @@ const LoginForm = () => {
       <div style={styles.formWrapper}>
         <div style={styles.formContainer}>
           <form>
-            <h2 style={{ textAlign: "center", fontSize: "70px", color: "#363100", fontWeight: "800" }}>
-              <span>
-                <img src="cuisining-wordmark.png" alt="C" style={{ height: "60px", width: "60px", marginBottom: "10px" }} />
-              </span>
-              UISINING
-            </h2>
+            {/* Header with Logo and Title */}
+            <div style={styles.header}>
+              <img
+                src="cuisining-wordmark.png"
+                alt="C"
+                style={styles.logo}
+              />
+              <h2 style={styles.title}>UISINING</h2>
+            </div>
             {/* Username Input */}
             <div style={styles.inputWrapper}>
               <label style={styles.label(focus.username)}>Username</label>
@@ -169,26 +177,27 @@ const LoginForm = () => {
                 type="text"
                 style={{
                   ...styles.input,
-                  ...(focus.username && styles.inputFocused), // Apply focused styles
+                  ...(focus.username && styles.inputFocused),
                 }}
                 onFocus={() => handleFocus("username")}
                 onBlur={(e) => handleBlur("username", e.target.value)}
               />
             </div>
+            {/* Password Input */}
             <div style={styles.inputWrapper}>
               <label style={styles.label(focus.password)}>Password</label>
               <input
                 type="password"
                 style={{
                   ...styles.input,
-                  ...(focus.password && styles.inputFocused), // Apply focused styles
+                  ...(focus.password && styles.inputFocused),
                 }}
                 onFocus={() => handleFocus("password")}
                 onBlur={(e) => handleBlur("password", e.target.value)}
               />
             </div>
             <button type="submit" style={styles.button}>Login</button>
-            <a href="#" className="forgot-password" style={styles.forgotPassword}>
+            <a href="#" style={styles.forgotPassword}>
               Forgot Password?
             </a>
             <hr />
