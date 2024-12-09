@@ -1,42 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Use useNavigate instead of useHistory
 
-const SignUpForm = () => {
-  const [focus, setFocus] = useState({
-    name: false,
-    username: false,
-    password: false,
-    confirmPassword: false,
-  });
-
-  const [showPassword, setShowPassword] = useState(false); // State for toggling password visibility
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // State for confirming password visibility
-  const [usernameTaken, setUsernameTaken] = useState(""); // State to handle username availability
-  const [passwordError, setPasswordError] = useState(""); // State for password validation error
-
-  // Simulate checking if a username is taken (replace with backend call if needed)
-  const checkUsernameAvailability = (username) => {
-    const takenUsernames = ["user1", "admin"]; // Example taken usernames
-    if (takenUsernames.includes(username)) {
-      setUsernameTaken("Username is already taken");
-    } else {
-      setUsernameTaken("Username is available");
-    }
-  };
-
-  // Password validation
-  const validatePassword = (password) => {
-    if (password.length < 6) {
-      setPasswordError("Password must be at least 6 characters long.");
-    } else {
-      setPasswordError("");
-    }
-  };
-
-  const handleFocus = (field) => setFocus((prev) => ({ ...prev, [field]: true }));
-  const handleBlur = (field, value) => {
-    if (!value) setFocus((prev) => ({ ...prev, [field]: false }));
-    if (field === "password") validatePassword(value); // Validate password on blur
-  };
+const SuccessPage = () => {
+  const [email, setEmail] = useState("");
+  const [isEmailSubmitted, setIsEmailSubmitted] = useState(false); // Track if email was submitted
+  const [errorMessage, setErrorMessage] = useState(""); // Track error messages
+  const navigate = useNavigate(); // Hook for navigation
 
   const styles = {
     background: {
@@ -63,122 +32,143 @@ const SignUpForm = () => {
       boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
       width: "100%",
       maxWidth: "400px",
+      textAlign: "center", // Center the content
     },
-    inputWrapper: {
-      position: "relative",
+    heading: {
+      fontSize: "35px",
+      color: "#363100",
+      fontWeight: "800",
       marginBottom: "20px",
     },
-    label: (focused) => ({
-      position: "absolute",
-      left: "10px",
-      top: focused ? "-10px" : "50%",
-      fontSize: focused ? "12px" : "16px",
-      color: "#363100",
-      transition: "all 0.3s ease",
-      transform: focused ? "translateY(0)" : "translateY(-50%)",
-      padding: "0 5px",
-    }),
-    input: {
-      width: "100%",
-      padding: "10px",
-      border: "1px solid transparent",
-      borderRadius: "10px",
-      outline: "none",
-      backgroundColor: "#f8f8f8",
-      transition: "all 0.3s ease",
+    logo: {
+      width: "50px",
+      height: "50px",
+      marginBottom: "20px", // Space below the logo
     },
-    inputFocused: {
-      border: "1px solid #C1B857",
-      boxShadow: "0 0 8px rgba(193, 184, 87, 0.5)",
-      backgroundColor: "#fff",
-    },
-    button: {
-      width: "100%",
-      padding: "10px",
-      margin: "10px 0",
-      border: "1px solid #ccc",
-      borderRadius: "10px",
-      backgroundColor: "#C1B857",
-      color: "#363100",
-      cursor: "pointer",
-      fontWeight: "700",
-    },
-    showPasswordButton: {
-      position: "absolute",
-      right: "10px",
-      top: "50%",
-      transform: "translateY(-50%)",
-      background: "transparent",
-      border: "none",
-      cursor: "pointer",
-    },
-    hrContainer: {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      margin: "20px 0",
-    },
-    hr: {
-      flex: 1,
-      height: "1px",
-      backgroundColor: "#000000",
-      border: "none",
-    },
-    orText: {
-      margin: "0 10px",
+    message: {
       fontSize: "16px",
       color: "#363100",
       fontWeight: "300",
+      marginBottom: "20px",
     },
-    socialButtonsContainer: {
-      display: "flex",
-      justifyContent: "center",
-      gap: "20px",
-    },
-    socialButtonImg: {
-      width: "100%",
-      maxWidth: "45px",
-      height: "auto",
+    button: {
+      padding: "10px 20px",
       borderRadius: "10px",
+      backgroundColor: "#C1B857",
+      color: "#363100",
+      fontWeight: "700",
       cursor: "pointer",
+      border: "none",
+      fontSize: "16px",
+      width: "100%",
     },
-    signup: {
-      justifyContent: "center",
-      display: "flex",
+    input: {
+      padding: "10px",
+      borderRadius: "10px",
+      border: "1px solid #C1B857",
+      width: "100%",
+      fontSize: "16px",
+      marginBottom: "20px",
+    },
+    logoutButton: {
+      padding: "10px 20px",
+      borderRadius: "10px",
+      backgroundColor: "#FF4D4D",
+      color: "white",
+      fontWeight: "700",
+      cursor: "pointer",
+      border: "none",
+      fontSize: "16px",
+      width: "100%",
+      marginTop: "20px", // Space for logout button
+    },
+    successMessage: {
+      fontSize: "18px",
+      color: "green",
       marginTop: "20px",
     },
-    signupText: {
-      fontSize: "14px",
-      fontWeight: "200",
-      color: "#363100",
-    },
-    signupLink: {
-      textDecoration: "none",
-      fontWeight: "700",
-      color: "#363100",
-    },
-    heading: {
-      textAlign: "center",
-      fontSize: "35px", // Reduced size for mobile
-      color: "#363100",
-      fontWeight: "800",
-      lineHeight: "1.2",
-    },
-    headingLogo: {
-      height: "40px", // Reduced size for mobile
-      width: "40px",
-      marginBottom: "10px",
-    },
-    passwordError: {
+    errorMessage: {
+      fontSize: "18px",
       color: "red",
-      fontSize: "12px",
-      marginTop: "5px",
+      marginTop: "20px",
     },
   };
 
+  const handleForgotPassword = (e) => {
+    e.preventDefault();
+
+    // Simple email validation for the sake of example (you can adjust the regex to be more thorough)
+    const emailRegex = /^[a-zA-Z0-9._-]+@gmail\.com$/;
+    if (emailRegex.test(email)) {
+      setIsEmailSubmitted(true); // Email is valid, show success message
+      setErrorMessage(""); // Clear error message if valid email
+    } else {
+      setErrorMessage("Please enter a valid Gmail address.");
+      setIsEmailSubmitted(false); // Don't show success if email is invalid
+    }
+
+    // Logic for password recovery would go here (e.g., send email to server)
+    console.log("Password recovery requested for email:", email);
+  };
+
+  const handleLogout = () => {
+    // Clear the session (localStorage, sessionStorage, or a state management solution)
+    localStorage.removeItem("userToken"); // Example: remove token or user data from localStorage
+    // Optionally clear other session data if needed
+    // localStorage.clear(); // Uncomment to clear all localStorage items
+    
+    // Redirect the user to the login page
+    navigate("/"); // Redirect to login page or home page
+  };
+
   return (
-    <p>Home</p>
+    <div style={styles.background}>
+      <div style={styles.formWrapper}>
+        <div style={styles.formContainer}>
+          {/* Check mark logo */}
+          <img src="cuisining-wordmark.png" alt="Success" style={styles.logo} />
+
+          {/* Heading */}
+          <h2 style={styles.heading}>Successful naka log in</h2>
+
+          {/* Success message */}
+          <p style={styles.message}>
+            Welcome sa luto luto
+          </p>
+
+          {/* Forgot Password Form */}
+          {!isEmailSubmitted ? (
+            <form onSubmit={handleForgotPassword}>
+              <input
+                type="email"
+                placeholder="Enter your Gmail"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                style={styles.input}
+                required
+              />
+              <button type="submit" style={styles.button}>
+                Submit for Password Reset
+              </button>
+            </form>
+          ) : (
+            // Show success message after email is submitted
+            <p style={styles.successMessage}>
+              A recovery email has been sent to {email}. Please check your inbox.
+            </p>
+          )}
+
+          {/* Show error message if email is invalid */}
+          {errorMessage && <p style={styles.errorMessage}>{errorMessage}</p>}
+
+          {/* Logout Button */}
+          <button onClick={handleLogout} style={styles.logoutButton}>
+            Log Out
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 
-export default SignUpForm;
+export default SuccessPage;

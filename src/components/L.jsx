@@ -160,33 +160,33 @@ const LoginForm = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-  
-    try {
-      const response = await fetch("http://localhost:5000/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
-      });
-  
-      const data = await response.json();
-  
-      if (response.status === 200) {
-        // Store the JWT token in localStorage
-        localStorage.setItem("authToken", data.token);
-  
-        // Redirect to the landing page
-        navigate("/Landing"); // Replace with the desired route
-      } else {
-        setError(data.message); // Show error message from backend
-      }
-    } catch (err) {
-      setError("An error occurred. Please try again.");
+  e.preventDefault();
+
+  try {
+    const response = await fetch("http://localhost:5000/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username, password }),
+    });
+
+    const data = await response.json();
+
+    if (response.status === 200) {
+      // Store the JWT token in localStorage
+      localStorage.setItem("authToken", data.token);
+
+      // Redirect to the landing page
+      navigate("/Landing"); // Replace with the desired route
+    } else {
+      setError(data.message); // Show error message from backend
     }
-  };
-  
+  } catch (err) {
+    setError("An error occurred. Please try again.");
+  }
+};
+
 
   return (
     <div style={styles.background}>
