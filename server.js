@@ -4,7 +4,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken"); // Import JWT for token generation
-const User = require("./model"); // Import the User model
+const User = require("./models/user"); // Import the User model
 
 const app = express();
 dotenv.config();
@@ -18,36 +18,56 @@ mongoose
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.log("MongoDB connection error:", err));
 
+// Middleware to verify JWT token
+const verifyToken = (req, res, next) => {
+  const token = req.header("Authorization");
+
+  if (!token) {
+    return res.status(401).json({ message: "Access denied. No token provided." });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    req.user = decoded; // Store decoded user information in the request object
+    next(); // Proceed to the next middleware/route handler
+  } catch (err) {
+    return res.status(400).json({ message: "Invalid token." });
+  }
+};
+
 // Sign-up Route
 app.post("/api/signup", async (req, res) => {
   const { name, username, password } = req.body;
 
-  // Check if username is already taken
-  const existingUser = await User.findOne({ username });
-  if (existingUser) {
-    return res.status(400).json({ message: "Username is already taken" });
-  }
-
-  // Hash the password before saving it to the database
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  // Create new user
-  const newUser = new User({
-    name,
-    username,
-    password: hashedPassword,
-  });
-
   try {
+    // Check if username is already taken
+    const existingUser = await User.findOne({ username });
+    if (existingUser) {
+      return res.status(400).json({ message: "Username is already taken" });
+    }
+
+    // Hash the password before saving
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create new user
+    const newUser = new User({
+      name,
+      username,
+      password: hashedPassword,
+    });
+
+    // Save the user to the database
     await newUser.save();
+
+    // Send success response
     res.status(201).json({ message: "User created successfully!" });
   } catch (err) {
-    console.log(err);
+    console.error("Error saving user:", err);  // Log error if user creation fails
     res.status(500).json({ message: "Error creating user" });
   }
 });
 
-// Login Route
+
 // Login Route
 app.post("/api/login", async (req, res) => {
   const { username, password } = req.body;
@@ -78,6 +98,11 @@ app.post("/api/login", async (req, res) => {
     console.error(err);
     res.status(500).json({ message: "Server error" });
   }
+});
+
+// Protected Route
+app.get("/api/protected-route", verifyToken, (req, res) => {
+  res.status(200).json({ message: "Protected data", user: req.user });
 });
 
 // Start server
