@@ -8,6 +8,7 @@ import OTP from './components/OTP'; // Import OTP Component
 import SetNewPass from './components/SetNewPass'; // Import Set New Password Component
 import Done from './components/Done'; // Import Done Component
 import Landing from './components/Landing'; // Import Home Component
+import DoneRegister from './components/DoneRegister'; // Import Done Register Component
 
 const App = () => {
   return (
@@ -22,7 +23,8 @@ const App = () => {
               <Route path="/OTP" element={<OTP />} />
               <Route path="/SetNewPass" element={<SetNewPass />} />
               <Route path="/Done" element={<Done />} />
-              <Route path="/Landing" element={<Landing />} />              
+              <Route path="/Landing" element={<Landing />} />       
+              <Route path="/DoneRegister" element={<DoneRegister />} />         
             </Routes>
           </Col>
         </Row>

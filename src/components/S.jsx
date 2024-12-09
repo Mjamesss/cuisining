@@ -1,6 +1,10 @@
 import React, { useState } from "react";
+import axios from "axios"; // Install axios for API requests
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const SignUpForm = () => {
+  const navigate = useNavigate(); // Initialize useNavigate
+
   const [focus, setFocus] = useState({
     name: false,
     username: false,
@@ -8,35 +12,102 @@ const SignUpForm = () => {
     confirmPassword: false,
   });
 
-  const [showPassword, setShowPassword] = useState(false); // State for toggling password visibility
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // State for confirming password visibility
-  const [usernameTaken, setUsernameTaken] = useState(""); // State to handle username availability
-  const [passwordError, setPasswordError] = useState(""); // State for password validation error
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [usernameTaken, setUsernameTaken] = useState("");
+  const [usernameError, setUsernameError] = useState(""); // State for username error
+  const [passwordError, setPasswordError] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    username: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [errorMessage, setErrorMessage] = useState("");
 
-  // Simulate checking if a username is taken (replace with backend call if needed)
   const checkUsernameAvailability = (username) => {
-    const takenUsernames = ["user1", "admin"]; // Example taken usernames
-    if (takenUsernames.includes(username)) {
-      setUsernameTaken("Username is already taken");
-    } else {
-      setUsernameTaken("Username is available");
+    // Check availability only if username is 4 characters or more
+    if (username.length >= 4) {
+      const takenUsernames = ["user1", "admin"];
+      if (takenUsernames.includes(username)) {
+        setUsernameTaken("Username is already taken");
+      } else {
+        setUsernameTaken("Username is available");
+      }
     }
   };
 
-  // Password validation
-  const validatePassword = (password) => {
-    if (password.length < 6) {
-      setPasswordError("Password must be at least 6 characters long.");
-    } else {
-      setPasswordError("");
+  // Username length validation (min 4 characters)
+  const validateUsername = (username) => {
+    if (username.length < 4) {
+      return "Username must be at least 4 characters long.";
     }
+    return ""; // Return an empty string if valid
+  };
+
+  const validatePassword = (password) => {
+    const passwordLength = password.length >= 6;
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumbers = /\d/.test(password);
+    const hasSpecialChars = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+    if (!passwordLength) {
+      return "Password must be at least 6 characters long.";
+    } else if (!hasUpperCase || !hasLowerCase) {
+      return "Password must contain both uppercase and lowercase letters.";
+    } else if (!hasNumbers) {
+      return "Password must contain at least one number.";
+    } else if (!hasSpecialChars) {
+      return "Password must contain at least one special character.";
+    }
+
+    return ""; // Return an empty string if valid
   };
 
   const handleFocus = (field) => setFocus((prev) => ({ ...prev, [field]: true }));
   const handleBlur = (field, value) => {
     if (!value) setFocus((prev) => ({ ...prev, [field]: false }));
-    if (field === "password") validatePassword(value); // Validate password on blur
+    if (field === "username") setUsernameError(validateUsername(value)); // Validate username length
+    if (field === "password") setPasswordError(validatePassword(value)); // Validate password
   };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
+    // Validate password before submitting
+    const passwordError = validatePassword(formData.password);
+    if (passwordError) {
+      setPasswordError(passwordError);
+      return; // Prevent form submission if password is invalid
+    }
+  
+    // Validate username length
+    const usernameError = validateUsername(formData.username);
+    if (usernameError) {
+      setUsernameError(usernameError);
+      return; // Prevent form submission if username is invalid
+    }
+  
+    if (formData.password !== formData.confirmPassword) {
+      setErrorMessage("Passwords do not match.");
+      return;
+    }
+  
+    try {
+      const response = await axios.post("http://localhost:5000/api/signup", formData);
+      console.log("Signup successful", response.data); // Log the response for debugging
+      navigate("/DoneRegister"); // Navigate to DoneRegister
+    } catch (error) {
+      console.error("Signup error:", error); // Log error details
+      setErrorMessage(error.response?.data?.message || "An error occurred during signup.");
+    }
+  };
+  
 
   const styles = {
     background: {
@@ -174,25 +245,33 @@ const SignUpForm = () => {
       fontSize: "12px",
       marginTop: "5px",
     },
+    usernameError: {
+      color: "red",
+      fontSize: "12px",
+      marginTop: "5px",
+    },
   };
 
   return (
     <div style={styles.background}>
       <div style={styles.formWrapper}>
         <div style={styles.formContainer}>
-          <form>
+          <form onSubmit={handleSubmit}>
             <h2 style={styles.heading}>CUISINING</h2>
             {/* Name Input */}
             <div style={styles.inputWrapper}>
-              <label style={styles.label(focus.name)}>Email</label>
+              <label style={styles.label(focus.name)}>Name</label>
               <input
                 type="text"
+                name="name"
+                value={formData.name}
                 style={{
                   ...styles.input,
                   ...(focus.name && styles.inputFocused),
                 }}
                 onFocus={() => handleFocus("name")}
                 onBlur={(e) => handleBlur("name", e.target.value)}
+                onChange={handleChange}
               />
             </div>
             {/* Username Input */}
@@ -200,6 +279,8 @@ const SignUpForm = () => {
               <label style={styles.label(focus.username)}>Username</label>
               <input
                 type="text"
+                name="username"
+                value={formData.username}
                 style={{
                   ...styles.input,
                   ...(focus.username && styles.inputFocused),
@@ -209,20 +290,27 @@ const SignUpForm = () => {
                   handleBlur("username", e.target.value);
                   checkUsernameAvailability(e.target.value); // Check username availability
                 }}
+                onChange={handleChange}
               />
-              {usernameTaken && <div style={{ color: "red" }}>{usernameTaken}</div>}
+              {usernameError && <div style={styles.usernameError}>{usernameError}</div>}
+              {usernameTaken && formData.username.length >= 4 && (
+                <div style={{ color: "green" }}>{usernameTaken}</div>
+              )}
             </div>
             {/* Password Input */}
             <div style={styles.inputWrapper}>
               <label style={styles.label(focus.password)}>Password</label>
               <input
                 type={showPassword ? "text" : "password"}
+                name="password"
+                value={formData.password}
                 style={{
                   ...styles.input,
                   ...(focus.password && styles.inputFocused),
                 }}
                 onFocus={() => handleFocus("password")}
                 onBlur={(e) => handleBlur("password", e.target.value)}
+                onChange={handleChange}
               />
               <button
                 type="button"
@@ -242,12 +330,15 @@ const SignUpForm = () => {
               <label style={styles.label(focus.confirmPassword)}>Confirm Password</label>
               <input
                 type={showConfirmPassword ? "text" : "password"}
+                name="confirmPassword"
+                value={formData.confirmPassword}
                 style={{
                   ...styles.input,
                   ...(focus.confirmPassword && styles.inputFocused),
                 }}
                 onFocus={() => handleFocus("confirmPassword")}
                 onBlur={(e) => handleBlur("confirmPassword", e.target.value)}
+                onChange={handleChange}
               />
               <button
                 type="button"
@@ -261,9 +352,7 @@ const SignUpForm = () => {
                 />
               </button>
             </div>
-            <button type="submit" style={styles.button}>
-              Sign Up
-            </button>
+            <button type="submit" style={styles.button}>Sign Up</button>
             {/* Divider */}
             <div style={styles.hrContainer}>
               <hr style={styles.hr} />
@@ -273,26 +362,16 @@ const SignUpForm = () => {
             {/* Social Media Buttons */}
             <div style={styles.socialButtonsContainer}>
               <a href="#" className="social-button" style={styles.socialButtonImg}>
-                <img
-                  src="facebook.png"
-                  alt="Facebook Login"
-                  style={styles.socialButtonImg}
-                />
+                <img src="facebook.png" alt="Facebook Login" style={styles.socialButtonImg} />
               </a>
               <a href="#" className="social-button" style={styles.socialButtonImg}>
-                <img
-                  src="google.png"
-                  alt="Google Login"
-                  style={styles.socialButtonImg}
-                />
+                <img src="google.png" alt="Google Login" style={styles.socialButtonImg} />
               </a>
             </div>
             <div style={styles.signup}>
               <p style={styles.signupText}>
                 Already Have an Account?{" "}
-                <a href="/" style={styles.signupLink}>
-                  Log In
-                </a>
+                <a href="/" style={styles.signupLink}>Log In</a>
               </p>
             </div>
           </form>
