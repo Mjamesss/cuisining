@@ -1,0 +1,12 @@
+*{
+  padding: 0;
+  margin: 0%;
+}
+.background {
+  background-image: url('lbg.png'); /* Replace with your image URL */
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  height: 100%;
+  width: 100%;
+}
