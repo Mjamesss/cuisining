@@ -13,6 +13,53 @@ const SetNewPassword = () => {
 
   const navigate = useNavigate(); // Initialize useNavigate
 
+  const handleFocus = (field) => setFocus((prev) => ({ ...prev, [field]: true }));
+  const handleBlur = (field, value) => {
+    if (!value) setFocus((prev) => ({ ...prev, [field]: false }));
+  };
+
+  const handlePasswordChange = (e) => setPassword(e.target.value);
+  const handleConfirmPasswordChange = (e) => setConfirmPassword(e.target.value);
+
+  const validateForm = () => {
+    // Reset errors
+    setError("");
+
+    // Validation checks
+    if (!password || !confirmPassword) {
+      setError("Both password fields are required.");
+      return false;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return false;
+    }
+
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters long.");
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (validateForm()) {
+      // Navigate to the Done page if the form is valid
+      navigate("/Done");
+    }
+  };
+
+  // Handle Enter key press to trigger form submission
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSubmit(e);
+    }
+  };
+
   const styles = {
     background: {
       backgroundImage: "url('lbg.png')", // Replace with your image URL
@@ -98,52 +145,7 @@ const SetNewPassword = () => {
     },
   };
 
-  const handleFocus = (field) => setFocus((prev) => ({ ...prev, [field]: true }));
-  const handleBlur = (field, value) => {
-    if (!value) setFocus((prev) => ({ ...prev, [field]: false }));
-  };
-
-  const handlePasswordChange = (e) => setPassword(e.target.value);
-  const handleConfirmPasswordChange = (e) => setConfirmPassword(e.target.value);
-
-  const validateForm = () => {
-    // Reset errors
-    setError("");
-
-    // Validation checks
-    if (!password || !confirmPassword) {
-      setError("Both password fields are required.");
-      return false;
-    }
-
-    if (password !== confirmPassword) {
-      setError("Passwords do not match.");
-      return false;
-    }
-
-    if (password.length < 8) {
-      setError("Password must be at least 8 characters long.");
-      return false;
-    }
-
-    return true;
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (validateForm()) {
-      // Navigate to the Done page if the form is valid
-      navigate("/Done");
-    }
-  };
-
-  // Handle Enter key press to trigger form submission
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter") {
-      handleSubmit(e);
-    }
-  };
+  
 
   return (
     <div style={styles.background}>

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import axios from "axios"; // Install axios for API requests
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 
+
+//Manwel
 const SignUpForm = () => {
   const navigate = useNavigate(); // Initialize useNavigate
 
@@ -24,9 +26,9 @@ const SignUpForm = () => {
     confirmPassword: "",
   });
   const [errorMessage, setErrorMessage] = useState("");
-
+  
+  // Check availability only if username is 4 characters or more
   const checkUsernameAvailability = (username) => {
-    // Check availability only if username is 4 characters or more
     if (username.length >= 4) {
       const takenUsernames = ["user1", "admin"];
       if (takenUsernames.includes(username)) {
@@ -37,14 +39,16 @@ const SignUpForm = () => {
     }
   };
 
+
   // Username length validation (min 4 characters)
+  //Antonio
   const validateUsername = (username) => {
     if (username.length < 4) {
       return "Username must be at least 4 characters long.";
     }
     return ""; // Return an empty string if valid
   };
-
+  //data validation ng password
   const validatePassword = (password) => {
     const passwordLength = password.length >= 6;
     const hasUpperCase = /[A-Z]/.test(password);
@@ -64,7 +68,7 @@ const SignUpForm = () => {
 
     return ""; // Return an empty string if valid
   };
-
+  //blur function ng placeholder
   const handleFocus = (field) => setFocus((prev) => ({ ...prev, [field]: true }));
   const handleBlur = (field, value) => {
     if (!value) setFocus((prev) => ({ ...prev, [field]: false }));
@@ -72,6 +76,7 @@ const SignUpForm = () => {
     if (field === "password") setPasswordError(validatePassword(value)); // Validate password
   };
 
+  //Shawn
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -97,7 +102,7 @@ const SignUpForm = () => {
       setErrorMessage("Passwords do not match.");
       return;
     }
-  
+    //eto ung fucntion na kung tama ung info mag nanavigate sa ./DoneRegister
     try {
       const response = await axios.post("http://localhost:5000/api/signup", formData);
       console.log("Signup successful", response.data); // Log the response for debugging

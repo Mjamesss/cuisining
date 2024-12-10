@@ -62,7 +62,6 @@ const SuccessPage = () => {
   };
 
   const handleContinue = () => {
-    // Navigate to the login page (assuming you use React Router)
     navigate("/"); // Use navigate instead of history.push
   };
 

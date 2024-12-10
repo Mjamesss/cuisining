@@ -1,3 +1,4 @@
+//Bands
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; // Use useNavigate instead of useHistory
 
@@ -6,6 +7,30 @@ const SuccessPage = () => {
   const [isEmailSubmitted, setIsEmailSubmitted] = useState(false); // Track if email was submitted
   const [errorMessage, setErrorMessage] = useState(""); // Track error messages
   const navigate = useNavigate(); // Hook for navigation
+
+  
+  const handleForgotPassword = (e) => {
+    e.preventDefault();
+
+    // Simple email validation for the sake of example (you can adjust the regex to be more thorough)
+    const emailRegex = /^[a-zA-Z0-9._-]+@gmail\.com$/;
+    if (emailRegex.test(email)) {
+      setIsEmailSubmitted(true); // Email is valid, show success message
+      setErrorMessage(""); // Clear error message if valid email
+    } else {
+      setErrorMessage("Please enter a valid Gmail address.");
+      setIsEmailSubmitted(false); // Don't show success if email is invalid
+    }
+
+    // Logic for password recovery would go here (e.g., send email to server)
+    console.log("Password recovery requested for email:", email);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("userToken");
+    navigate("/"); // Redirect to login page or home page
+  };
+  
 
   const styles = {
     background: {
@@ -94,33 +119,7 @@ const SuccessPage = () => {
     },
   };
 
-  const handleForgotPassword = (e) => {
-    e.preventDefault();
-
-    // Simple email validation for the sake of example (you can adjust the regex to be more thorough)
-    const emailRegex = /^[a-zA-Z0-9._-]+@gmail\.com$/;
-    if (emailRegex.test(email)) {
-      setIsEmailSubmitted(true); // Email is valid, show success message
-      setErrorMessage(""); // Clear error message if valid email
-    } else {
-      setErrorMessage("Please enter a valid Gmail address.");
-      setIsEmailSubmitted(false); // Don't show success if email is invalid
-    }
-
-    // Logic for password recovery would go here (e.g., send email to server)
-    console.log("Password recovery requested for email:", email);
-  };
-
-  const handleLogout = () => {
-    // Clear the session (localStorage, sessionStorage, or a state management solution)
-    localStorage.removeItem("userToken"); // Example: remove token or user data from localStorage
-    // Optionally clear other session data if needed
-    // localStorage.clear(); // Uncomment to clear all localStorage items
-    
-    // Redirect the user to the login page
-    navigate("/"); // Redirect to login page or home page
-  };
-
+  
   return (
     <div style={styles.background}>
       <div style={styles.formWrapper}>

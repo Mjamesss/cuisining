@@ -1,3 +1,4 @@
+//Arjay
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; // Use useNavigate instead of useHistory
 
@@ -15,9 +16,7 @@ const Done = () => {
       clearInterval(timer); // Clear timer when countdown reaches 0
 
       // Destroy the session
-      sessionStorage.removeItem("userSession"); // Remove user session from sessionStorage
-      // If you store session info in localStorage, use:
-      // localStorage.removeItem("userSession");
+      sessionStorage.removeItem("userSession");
 
       navigate("/"); // Navigate to home page after session is destroyed
     }
@@ -25,6 +24,12 @@ const Done = () => {
     // Cleanup the timer if component unmounts
     return () => clearInterval(timer);
   }, [countdown, navigate]); // Dependencies are countdown and navigate
+
+  const handleContinue = () => {
+    // Navigate to the login page (assuming you use React Router)
+    navigate("/"); // Use navigate instead of history.push
+  };
+
 
   const styles = {
     background: {
@@ -89,11 +94,7 @@ const Done = () => {
     },
   };
 
-  const handleContinue = () => {
-    // Navigate to the login page (assuming you use React Router)
-    navigate("/"); // Use navigate instead of history.push
-  };
-
+ 
   return (
     <div style={styles.background}>
       <div style={styles.formWrapper}>
